@@ -6,8 +6,6 @@ import { FaPlusCircle } from 'react-icons/fa';
 
 let courseService = CourseService.getInstance()
 
-const courses = courseService.findAllCourses()
-
 const CourseDeck = () =>
     <div class="container-fluid">
         <nav className="navbar navbar-expand-md shadow-sm row">

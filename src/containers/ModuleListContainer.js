@@ -1,31 +1,28 @@
 import React from 'react'
-import ModuleListItem from "./ModuleListItem";
+import ModuleListItem from "../components/ModuleListItem";
 import CourseService from "../services/CourseService";
-import coursesJson from '../services/courses.json'
 
 let courseService = CourseService.getInstance()
 
-//let courses = coursesJson;
 
 export default class ModuleListContainer
     extends React.Component {
-    // course = coursesJson[0];
 
     constructor(props) {
         super(props)
-        this.titleChanged = this.titleChanged.bind(this)
-        this.createModule = this.createModule.bind(this)
         this.state = {
             newModule: {
                 title: ''
             },
             modules: this.props.course.modules
-                // this.courses[0]["modules"]
         }
+
+        this.titleChanged = this.titleChanged.bind(this)
+        this.createModule = this.createModule.bind(this)
+
     }
 
     titleChanged = (event) => {
-        // this.state.newModule.title = event.currentTarget.value
         this.setState({
             newModule: {
                 title: event.currentTarget.value,
@@ -35,13 +32,6 @@ export default class ModuleListContainer
     }
 
     createModule = () => {
-        // this.setState(prevState => ({
-        //         newModule: {
-        //             title: ''
-        //         },
-        //         modules:
-        //     })
-        // )
         let newCourse = {
             id: this.props.course.id,
             title: this.props.course.title,

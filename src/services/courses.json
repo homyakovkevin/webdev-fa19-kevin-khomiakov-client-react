@@ -93,6 +93,16 @@
   },
   {
     "id": "456",
-    "title": "Course 4"
+    "title": "Course 4",
+    "modules": [
+      {
+        "id": "567",
+        "title": "Module 3 1"
+      },
+      {
+        "id": "678",
+        "title": "Module 3 2"
+      }
+    ]
   }
 ]

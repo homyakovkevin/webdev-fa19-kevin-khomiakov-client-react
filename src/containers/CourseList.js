@@ -2,7 +2,7 @@ import React from 'react'
 import CourseService from '../services/CourseService'
 import {FaBars} from 'react-icons/fa';
 import {FaPlusCircle} from 'react-icons/fa';
-import ListContainer from "./ListContainer";
+import ListContainer from "../containers/ListContainer";
 
 let courseService = CourseService.getInstance()
 
@@ -66,7 +66,7 @@ export default class CourseList extends React.Component {
             <div className="container-fluid">
                 <nav className="navbar navbar-expand-md shadow-sm row">
                     <div className="col-2 col-sm-1 col-md-1">
-                        <FaBars/>
+                        <button><FaBars/></button>
                     </div>
                     <div className="col-0 col-sm-3 col-md-3 collapse navbar-collapse">
                         <a className="navbar-brand wbdv-label wbdv-course-manager">Course Manager</a>
@@ -85,8 +85,9 @@ export default class CourseList extends React.Component {
                 <this.state.curView
                     courses={this.state.courses}
                     callback={this.switchView.bind(this)}
-                dCallback={this.deleteCourse.bind(this)}/>
+                    dCallback={this.deleteCourse.bind(this)}/>
             </div>
         )
     }
 }
+

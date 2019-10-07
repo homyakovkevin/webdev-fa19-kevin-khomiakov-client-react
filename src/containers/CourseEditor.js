@@ -1,14 +1,13 @@
 import React from 'react'
 import ModuleListContainer from "./ModuleListContainer";
 import CourseService from "../services/CourseService";
-import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom'
 import { FaTimes } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa';
-import LessonTabs from "./LessonTabs";
+import LessonTabs from "../components/LessonTabs";
 
 let courseService = CourseService.getInstance()
 
-const CourseEditor = ({match}) =>
+const CourseEditor = ({match, course, modules, lessons,topics, params}) =>
     <div>
         {/*<Link to='/'>List</Link>*/}
         <nav className="navbar navbar-dark navbar-expand-md shadow">

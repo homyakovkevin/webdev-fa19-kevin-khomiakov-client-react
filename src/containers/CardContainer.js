@@ -1,16 +1,11 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
-import CourseRow from "./CourseRow";
 import { FaCaretDown } from 'react-icons/fa';
 import { FaGripHorizontal } from 'react-icons/fa';
 import { FaSortAlphaDown } from 'react-icons/fa';
-import { FaBars } from 'react-icons/fa';
-import { FaPlusCircle } from 'react-icons/fa';
-import CourseService from "../services/CourseService";
 import ListContainer from "./ListContainer";
-import CourseCard from "./CourseCard";
+import CourseCard from "../components/CourseCard";
 
-const CardContainer = ({courses, callback}) => {
+const CardContainer = ({courses, callback, dCallback}) => {
     return (
         <table className="table">
             <thead>
@@ -34,12 +29,7 @@ const CardContainer = ({courses, callback}) => {
             <div className="card-group">
             {
                 courses.map(course =>
-                        <CourseCard
-                            // key={course.id}
-                            course={course}
-                            // title={course.title}
-                        />
-                    // seats={course.seats}/>
+                        <CourseCard course={course} callback={dCallback}/>
                 )
             }
             </div>
