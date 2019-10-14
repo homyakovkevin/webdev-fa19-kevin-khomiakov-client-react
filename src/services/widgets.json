@@ -1,0 +1,7 @@
+[
+  {"id": 123, "type": "HEADING", "name": "Widget 1"},
+  {"id": 234, "type": "PARAGRAPH", "name": "Widget 2"},
+  {"id": 345, "type": "IMAGE", "name": "Widget 3"},
+  {"id": 456, "type": "LINK", "name": "Widget 4"},
+  {"id": 567, "type": "LIST", "name": "Widget 5"}
+]
