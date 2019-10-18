@@ -1,0 +1,73 @@
+html {
+    background-color: #F5F5F5;
+}
+
+.wbdv-hamburger {
+    border:none;
+    background: none;
+    color: #FFFFFF;
+}
+
+.wbdv-hamburger :hover {
+    color: black;
+}
+
+.wbdv-course-manager {
+    color: #FFFFFF !important;
+    font-weight: bold;
+}
+
+.wbdv-new-course {
+    font-style: italic;
+}
+
+.wbdv-add-course {
+    border:none;
+    background: none;
+    size: 100px;
+}
+
+.title-row {
+    background-color: #F5F5F5 !important;
+}
+
+#table-body {
+    background-color: #FFFFFF;
+}
+
+.wbdv-title {
+    color: black;
+}
+
+.wbdv-delete {
+    border:none;
+    background: none;
+}
+
+.btn-title {
+    border:none;
+    background:none;
+}
+
+.btn-title :hover {
+    color :black;
+}
+
+.btn-plus-right {
+    border:none;
+    background:none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.wbdv-delete {
+    border:none;
+    background:none;
+}
+
+@media only screen and (max-width: 900px) {
+    .hidden{
+        display: none;
+    }
+}

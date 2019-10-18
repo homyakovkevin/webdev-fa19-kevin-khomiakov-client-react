@@ -1,0 +1,49 @@
+.sidenav {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 60px;
+}
+
+.wbdv-module {
+    padding-top: 50px;
+}
+
+.wbdv-container {
+    border:none;
+}
+
+.wbdv-close {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+}
+
+.wbdv-new-page-btn {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+}
+
+.wbdv-modules {
+    border: none;
+}
+
+.list-group-item {
+    border: none;
+    background: none;
+}
+
+.wbdv-new {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+}
+
+.wbdv-page-tab {
+    color: #FFFFFF;
+}

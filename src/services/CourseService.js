@@ -1,15 +1,15 @@
-import coursesJson from './courses.json';
+import coursesJson from "./courses.json"
+
 
 export default class CourseService {
-    static myInstance = null;
 
-    courses = coursesJson;
-
-    static getInstance() {
-        if (CourseService.myInstance == null) {
-            CourseService.myInstance = new CourseService()
+    constructor() {
+        if (!!CourseService.instance) {
+            return CourseService.instance;
         }
-        return this.myInstance
+        CourseService.instance = this;
+        this.courses = coursesJson;
+        return this;
     }
 
     findAllCourses() {
@@ -28,12 +28,10 @@ export default class CourseService {
         this.courses = this.courses.filter(course => course.id !== courseId)
     }
 
-    updateCourse(courseId, courseToUpdate) {
-        for (let i = 0; i < this.courses.length; i++) {
-            if (this.courses[i].id == courseId) {
-                this.courses[i] = courseToUpdate
-            }
-        }
+    updateCourse(courseId, course) {
+        let this_course = this.findCourseById(courseId);
+        this_course.title = course.title;
+        this_course.modules = course.modules;
     }
 
 }
