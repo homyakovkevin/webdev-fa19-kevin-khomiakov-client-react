@@ -14,6 +14,13 @@ export default class CourseGrid
         this.state = {}
     }
 
+    titleChanged = (event) => {
+        this.setState({
+            title: event.target.value
+
+        })
+    };
+
     render() {
         return (
             <div className="container-fluid">
@@ -28,10 +35,14 @@ export default class CourseGrid
                     </div>
                     <div className="col-8 col-sm-7 col-md-7">
                         <input className="form-control wbdv-field wbdv-new-course" placeholder="New Course Title"
-                               type="text"/>
+                               onChange={this.titleChanged} type="text"/>
                     </div>
                     <div className="col-2 col-sm-1 col-md-1">
-                        <button className="wbdv-button wbdv-add-course" onClick={() => this.props.createCourse(this.props.course)}>
+                        <button className="wbdv-button wbdv-add-course" onClick={() => this.props.createCourse({
+                            id: 0,
+                            title: this.state.title,
+                            widgets: []
+                        })}>
                             <FaPlusCircle size={25}/>
                         </button>
                     </div>
@@ -73,12 +84,17 @@ export default class CourseGrid
                                 <CourseCard course={course}
                                             selectCourse={this.props.selectCourse}
                                             deleteCourse={this.props.deleteCourse}
+                                            updateCourse={this.props.updateCourse}
                                             key={key}/>)}
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <button className="btn float-right">
+                <button className="btn float-right" onClick={() => this.props.createCourse({
+                    id: 0,
+                    title: "New Course",
+                    widgets:[]
+                })}>
                     <FaPlusCircle size={35}/>
                 </button>
             </div>

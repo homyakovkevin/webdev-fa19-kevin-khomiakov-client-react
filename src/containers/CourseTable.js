@@ -14,6 +14,13 @@ export default class CourseTable extends React.Component {
         this.state = {}
     }
 
+    titleChanged = (event) => {
+        this.setState({
+            title: event.target.value
+
+        })
+    };
+
     render() {
         return (
             <div>
@@ -28,10 +35,14 @@ export default class CourseTable extends React.Component {
                     </div>
                     <div className="col-8 col-sm-7 col-md-7">
                         <input className="form-control wbdv-field wbdv-new-course" placeholder="New Course Title"
-                               type="text"/>
+                               onChange={this.titleChanged} type="text"/>
                     </div>
                     <div className="col-2 col-sm-1 col-md-1">
-                        <button className="wbdv-button wbdv-add-course" onClick={() => this.props.createCourse(this.props.course)}>
+                        <button className="wbdv-button wbdv-add-course" onClick={() => this.props.createCourse({
+                            id: 0,
+                            title: this.state.title,
+                            widgets: []
+                        })}>
                             <FaPlusCircle size={25}/>
                         </button>
                     </div>
@@ -52,9 +63,9 @@ export default class CourseTable extends React.Component {
                             <th scope="col" className="hidden wbdv-header wbdv-last-modified">Last modified by me</th>
                             <th scope="col" className="hidden">
                                 <Link to="/course-grid">
-                                <button className="btn-title wbdv-button wbdv-grid-layout">
-                                    <FaGripHorizontal/>
-                                </button>
+                                    <button className="btn-title wbdv-button wbdv-grid-layout">
+                                        <FaGripHorizontal/>
+                                    </button>
                                 </Link>
                             </th>
                             <th scope="col" className="hidden">
@@ -68,12 +79,17 @@ export default class CourseTable extends React.Component {
                         {this.props.courses.map((course) =>
                             <CourseRow selectCourse={this.props.selectCourse}
                                        deleteCourse={this.props.deleteCourse}
+                                       updateCourse={this.props.updateCourse}
                                        course={course} key={course.id}/>
                         )}
                         </tbody>
                     </table>
                 </div>
-                <button className="btn-plus-right">
+                <button className="btn-plus-right" onClick={() => this.props.createCourse({
+                    id: 0,
+                    title: "New Course",
+                    widgets: []
+                })}>
                     <FaPlusCircle size={35}/>
                 </button>
             </div>

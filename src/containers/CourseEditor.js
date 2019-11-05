@@ -11,13 +11,29 @@ import WidgetService from "../services/WidgetService";
 import {FaTimes} from "react-icons/fa";
 import {FaPlus} from "react-icons/fa";
 import '../styles/CourseEditor.css'
+import CourseService from "../services/CourseService";
 
 export default class CourseEditor
     extends React.Component {
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const paths = window.location.pathname.split('/')
+        const courseId = paths[paths.length - 1]
+        if (this.state.course && this.state.course.id != courseId)
+            this.service.findCourseById(courseId)
+                .then(course => this.setState({
+                    course: course
+                }))
+    }
+
     constructor(props) {
         super(props)
+
+        this.service = new CourseService();
+
         this.state = {
-            modules: this.props.course.modules,
+            course: {title: "", id: -1, modules: []},
+            modules: [],
             selectedModule: "",
             lessonSelected: "",
             selectedTopic: "",
@@ -28,6 +44,8 @@ export default class CourseEditor
         }
 
         this.widgetService = new WidgetService();
+
+        this.store = createStore(widgetReducer);
     }
 
     createTopic = () => {
@@ -103,12 +121,15 @@ export default class CourseEditor
         this.setState({
             selectedTopic: topic,
         })
+    }
 
-        let widgets = this.widgetService.findWidgets(topic.id);
-
-        this.store = createStore(widgetReducer, {topicId: topic.id, widgets: widgets, Previewed: false})
-
-
+    componentDidMount() {
+        this.widgetService.findWidgets()
+            .then((widgets) => this.setState(
+                {
+                    widgets: widgets
+                }
+            ))
     }
 
     updateModule = (module, title) => {
@@ -222,7 +243,7 @@ export default class CourseEditor
                             <FaTimes/>
                         </button>
                         <b id="title-nav" className="wbdv-course-title wbdv-new">
-                            {this.props.course.title}
+                            {this.state.course.title}
                         </b>
                         <div className="collapse navbar-collapse">
                             <a className="nav-link wbdv-page-tab" href="#">Build</a>
@@ -243,7 +264,7 @@ export default class CourseEditor
                         <ModuleList selectedModule={this.state.selectedModule}
                                     selectModule={this.selectModule}
                                     updateModule={this.updateModule}
-                                    modules={this.state.modules}
+                                    modules={this.state.course.modules}
                                     createModule={this.createModule}
                                     moduleTitleChanged={this.moduleTitleChanged}
                                     deleteModule={this.deleteModule}
@@ -266,7 +287,8 @@ export default class CourseEditor
                                     topicTitleChanged={this.topicTitleChanged}
                                     deleteTopic={this.deleteTopic}/>
                         <br/>
-                        {this.state.selectedTopic && this.store && <Provider store={this.store}>
+                        {this.state.selectedTopic && this.store &&
+                        <Provider store={this.store}>
                             <WidgetListContainer/>
                         </Provider>}
                     </div>

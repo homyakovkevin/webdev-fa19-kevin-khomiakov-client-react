@@ -3,7 +3,7 @@ import React from 'react';
 
 const HeadingWidget = ({
                            index, widget, widgets, deleteWidget, moveWidgetUp, moveWidgetDown, Previewed,
-                           changeWidgetText, changeHeadSize, changeWidgetName, changeWidgetType,
+                           updateWidget
                        }) =>
 
     <div className="mb-5 card p-1">
@@ -18,17 +18,22 @@ const HeadingWidget = ({
                         widgets={widgets}
                         moveWidgetUp={moveWidgetUp}
                         moveWidgetDown={moveWidgetDown}
-                        changeWidgetType={changeWidgetType}
                         deleteWidget={deleteWidget}
+                        updateWidget={updateWidget}
                     />
                 </div>
                 <div className="form-group row ml-sm-2 col-sm-12">
-                    <input onChange={(event) => changeWidgetText(widget, event.target.value)} className="form-control"
+                    <input onChange={(event) => updateWidget(widget.id, {
+                        ...widget,
+                        text: event.target.value
+                    })} className="form-control"
                            placeholder="Heading text"/>
                 </div>
                 <div className="form-group row ml-sm-2 col-sm-12">
                     <select className="form-control" defaultValue={widget.size}
-                            onChange={(event) => changeHeadSize(widget, event.target.value)}>
+                            onChange={(event) => updateWidget(widget.id, {
+                                ...widget, size: event.target.value
+                            })}>
                         <option value="h1">Heading 1</option>
                         <option value="h2">Heading 2</option>
                         <option value="h3">Heading 3</option>
@@ -38,7 +43,7 @@ const HeadingWidget = ({
                     </select>
                 </div>
                 <div className="form-group row ml-sm-2 col-sm-12">
-                    <input onChange={(event) => changeWidgetName(widget, event.target.value)} className="form-control"
+                    <input onChange={(event) =>updateWidget(widget.id, {...widget,name: event.target.value})} className="form-control"
                            placeholder="Widget name"/>
                 </div>
                 <div className="form-group row ml-sm-2 col-sm-12">
@@ -48,27 +53,27 @@ const HeadingWidget = ({
         }
         <div className="form-group row ml-sm-2 col-sm-12">
             {
-                widget.size === 'h1' &&
+                widget.size === "h1" &&
                 <h1>{widget.text}</h1>
             }
             {
-                widget.size === 'h2' &&
+                widget.size === "h2" &&
                 <h2>{widget.text}</h2>
             }
             {
-                widget.size === 'h3' &&
+                widget.size === "h3" &&
                 <h3>{widget.text}</h3>
             }
             {
-                widget.size === 'h4' &&
+                widget.size === "h4" &&
                 <h4>{widget.text}</h4>
             }
             {
-                widget.size === 'h5' &&
+                widget.size === "h5" &&
                 <h5>{widget.text}</h5>
             }
             {
-                widget.size === 'h6' &&
+                widget.size === "h6" &&
                 <h6>{widget.text}</h6>
             }
         </div>

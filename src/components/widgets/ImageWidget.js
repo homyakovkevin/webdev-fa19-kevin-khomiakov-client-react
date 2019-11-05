@@ -2,8 +2,8 @@ import WidgetButtons from "../WidgetButtons";
 import React from "react";
 
 const ImageWidget = ({
-                         index, widget, widgets, deleteWidget, moveWidgetUp, changeWidgetType, moveWidgetDown,
-                         Previewed, changeImageSource, changeWidgetName
+                         index, widget, widgets, deleteWidget, moveWidgetUp, moveWidgetDown,
+                         updateWidget, Previewed
                      }) =>
 
     <div className="mb-5 card p-1">
@@ -18,18 +18,18 @@ const ImageWidget = ({
                         widgets={widgets}
                         moveWidgetUp={moveWidgetUp}
                         moveWidgetDown={moveWidgetDown}
-                        changeWidgetType={changeWidgetType}
                         deleteWidget={deleteWidget}
+                        updateWidget={updateWidget}
                     />
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
                     <input className="form-control" placeholder="http://lorempixel.com/300/150/"
                            defaultValue={widget.src}
-                           onChange={(event) => changeImageSource(widget, event.target.value)}/>
+                           onChange={(event) => updateWidget(widget.id, {...widget, src: event.target.value})}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
                     <input className="form-control" placeholder="Widget name"
-                           onChange={(event) => changeWidgetName(widget, event.target.value)}
+                           onChange={(event) => updateWidget(widget.id, {...widget, name: event.target.value})}
                            defaultValue={widget.name}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">

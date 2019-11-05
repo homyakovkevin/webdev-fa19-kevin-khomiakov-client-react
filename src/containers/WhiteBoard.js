@@ -7,51 +7,104 @@ import CourseService from "../services/CourseService";
 import "../styles/WhiteBoard.css"
 
 export default class Whiteboard extends React.Component {
-    courses = (new CourseService()).findAllCourses();
+    courseService = new CourseService();
     constructor(props) {
 
         super(props);
         this.state = {
-            selectedCourse: this.courses[0],
-            courses: this.courses
+            selectedCourse: null,
+            courses: [],
+            title: "New Class"
         }
 
     }
 
-    createCourse  = course => {
-        this.setState({
-            courses: this.state.courses.push(course)
-        })
+    componentDidMount() {
+        this.courseService.findAllCourses()
+            .then(courses =>
+                this.setState({
+                    courses: courses,
+                    selectedCourse: courses.length > 0 ? courses[0] : null
+                })
+            )
     }
 
-    selectCourse = course =>
-        this.setState({selectedCourse: course})
+    createCourse = (course) => {
+        console.log(course)
+        this.courseService.createCourse(course)
+            .then(
+                response => {
+                    return this.courseService.findAllCourses()
+                }
+            )
+            .then(courses => {
+                console.log(courses)
+                this.setState({
+                    courses: courses,
+                })
+            })
+    };
+
+    selectCourse = course => {
+        this.courseService.findCourseById(course.id)
+            .then(() => {
+                this.setState({
+                    selectedCourse: course,
+                })
+            })
+    };
 
     deleteCourse = (id) => {
-        this.setState({
-            courses: this.state.courses.filter(course => course.id !== id)
-        })
-    }
+        this.courseService.deleteCourse(id)
+            .then(response => {
+                return this.courseService.findAllCourses()
+            })
+            .then(courses => {
+                this.setState({
+                    courses: courses,
+                })
+            })
+    };
+
+    updateCourse = (cid, course) => {
+        this.courseService.updateCourse(cid, course)
+            .then(response => {
+                return this.courseService.findAllCourses()
+            })
+            .then(courses => {
+                this.setState({
+                    courses: courses
+                })
+            })
+    };
 
     render() {
         return (
             <Router>
+
                 <div>
+
                     <Route path="/(course-table|)"
                            render={() => <CourseTable
                                selectCourse={this.selectCourse}
                                deleteCourse={this.deleteCourse}
+                               courses={this.state.courses}
                                createCourse={this.createCourse}
-                               courses={this.state.courses}/>}/>
+                               updateCourse={this.updateCourse}
+                           />}/>
                     <Route path="/course-grid"
                            render={() => <CourseGrid
                                selectCourse={this.selectCourse}
                                deleteCourse={this.deleteCourse}
-                               courses={this.state.courses}/>}/>
-                    <Route path={"/course-editor/" + this.state.selectedCourse.id}
+                               courses={this.state.courses}
+                               createCourse={this.createCourse}
+                               updateCourse={this.updateCourse}/>}/>
+                    <Route path={"/course-editor/:courseId"}
                            render={() => <CourseEditor
                                selectCourse={this.selectCourse}
                                course={this.state.selectedCourse}/>}/>
+
+
                 </div>
             </Router>
 

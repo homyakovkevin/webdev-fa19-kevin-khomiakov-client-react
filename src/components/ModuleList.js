@@ -23,7 +23,7 @@ export default class ModuleList extends React.Component {
         return modules;
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.modules !== this.props.modules) {
             this.setState({
                 modules: this.props.modules

@@ -1,5 +1,6 @@
-import coursesJson from "./courses.json"
+// import coursesJson from "./courses.json";
 
+let url = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/courses";
 
 export default class CourseService {
 
@@ -8,30 +9,41 @@ export default class CourseService {
             return CourseService.instance;
         }
         CourseService.instance = this;
-        this.courses = coursesJson;
         return this;
     }
 
-    findAllCourses() {
-        return this.courses
-    }
+    findAllCourses = () =>
+        fetch(url).then(response => response.json());
 
-    createCourse(course) {
-        this.courses.push(course)
-    }
+    createCourse = course =>
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(course),
+            headers: {'content-type': 'application/json'}
+        });
 
-    findCourseById(courseId) {
-        return this.courses.find(course => course.id === courseId)
-    }
+    findCourseById = (id) =>
+        fetch(url + '/' + id).then(response => response.json());
 
-    deleteCourse(courseId) {
-        this.courses = this.courses.filter(course => course.id !== courseId)
-    }
+    deleteCourse = (courseId) =>
+        fetch(url + '/' + courseId, {
+            method: 'DELETE',
+            body: JSON.stringify(courseId),
+            headers: {
+                'content-type': 'application/json',
+            }
+        });
 
     updateCourse(courseId, course) {
-        let this_course = this.findCourseById(courseId);
-        this_course.title = course.title;
-        this_course.modules = course.modules;
-    }
+        return fetch(url + "/" + courseId,
+            {
+                method: "PUT",
+                body: JSON.stringify(course),
+                headers: {
+                    "content-type": "application/json"
+                }
+            })
+            .then(response => response.json());
+    };
 
 }

@@ -4,31 +4,49 @@ import WidgetService from '../services/WidgetService'
 
 const widgetService = new WidgetService();
 
-const stateToPropertyMapper = state => ({
-    widgets: state.widgets,
-    topicId: state.topicId,
-    Previewed: state.Previewed
-})
+function SwapItems(items, firstIndex, secondIndex) {
+    let results = items.slice();
+    let firstItem = items[firstIndex];
+    results[firstIndex] = items[secondIndex];
+    results[secondIndex] = firstItem;
+    return results;
+}
+
+
+const stateToPropertyMapper = (state) => {
+    console.log(state.widgets);
+    return {
+        widgets: state.widgets,
+        topicId: state.topicId,
+    }
+};
+
 
 const propertyToDispatchMapper = dispatch => ({
 
-    updateWidget: newWidget =>
-        widgetService
-            .updateWidget(newWidget)
+    updateWidget: (wid, newWidget) => {
+        return widgetService
+            .updateWidget(wid, newWidget)
+            .then(response =>
+                widgetService.findWidgets())
             .then(widgets =>
                 dispatch({
                     type: 'UPDATE_WIDGET',
                     widgets: widgets
-                })),
+                }))
+    },
     deleteWidget: widgetId =>
-        dispatch({
-            type: 'DELETE_WIDGET',
-            widgets: widgetService.deleteWidget(widgetId)
-        }),
+        widgetService.deleteWidget(widgetId)
+            .then(response => widgetService.findWidgets())
+            .then(widgets =>
+                dispatch({
+                    type: 'DELETE_WIDGET',
+                    widgets: widgets
+                })),
 
-    findWidgets: topicId =>
+    findWidgets: () =>
         widgetService
-            .findWidgets({topicId})
+            .findWidgets()
             .then(widgets =>
                 dispatch({
                     type: 'FIND_ALL_WIDGETS',
@@ -45,74 +63,35 @@ const propertyToDispatchMapper = dispatch => ({
                     widget: widget
                 })),
 
-    createWidget: () => dispatch({
-        type: 'CREATE_WIDGET'
-    }),
+    createWidget: (topicId, widget) =>
+        widgetService
+            .createWidget(topicId, widget)
+            .then(widgets =>
+                dispatch({
+                    type: 'CREATE_WIDGET',
+                    widgets: widgets
+                })),
 
+    moveWidgetUp: (widgets, widgetId) => {
+        let index = widgets.indexOf(widgets.find(x => x.id === widgetId));
+        let new_widgets = SwapItems(widgets, index, index - 1);
+        widgetService.updateOrder(new_widgets)
+            .then(widgets => dispatch({type: 'MOVE_UP', widgets: widgets}))
 
-    moveWidgetUp: (widgetId) => {
-        dispatch({type: 'MOVE_WIDGET_UP', widgetId: widgetId})
     },
 
-    moveWidgetDown: (widgetId) => {
-        dispatch({type: 'MOVE_WIDGET_DOWN', widgetId: widgetId})
+    moveWidgetDown: (widgets, widgetId) => {
+        let index2 = widgets.indexOf(widgets.find(x => x.id === widgetId));
+        let new_widgets = SwapItems(widgets, index2, index2 + 1);
+        widgetService.updateOrder(new_widgets).then(widgets =>
+            dispatch({type: 'MOVE_DOWN', widgets: widgets}))
     },
 
-    changeWidgetType: (widget, type) => dispatch({
-        type: 'UPDATE_WIDGET',
-        widget: widget,
-        widgetType: type
-    }),
-    changeWidgetText: (widget, text) => dispatch({
-        type: 'UPDATE_WIDGET',
-        widget: widget,
-        text: text
-    }),
-    changeWidgetName: (widget, name) => dispatch({
-        type: 'UPDATE_WIDGET',
-        widget: widget,
-        name: name
-    }),
-    changeHeadSize: (widget, size) => dispatch({
-        type: 'UPDATE_WIDGET',
-        widget: widget,
-        size: size
-    }),
-    togglePreview: () => dispatch({
-        type: 'PREVIEW'
-    }),
-    changeListContents: (widget, items) => dispatch({
-        type: 'UPDATE_WIDGET',
-        widget: widget,
-        items: items
-    }),
-    changeListType: (widget, type) => dispatch({
-        widget: widget,
-        type: 'UPDATE_WIDGET',
-        listType: type
-    }),
-    changeImageSource: (widget, src) => dispatch({
-        type: 'UPDATE_WIDGET',
-        widget: widget,
-        src: src
-    }),
-    changeWidgetLink: (widget, href) => dispatch({
-        type: 'UPDATE_WIDGET',
-        widget: widget,
-        href: href
-    }),
-    changeWidgetTitle:
-        (widget, title) => dispatch({
-            type: 'UPDATE_WIDGET',
-            widget: widget,
-            title: title
-        }),
-})
-
+});
 
 const WidgetListContainer = connect(
     stateToPropertyMapper,
     propertyToDispatchMapper,
-)(WidgetListComponent)
+)(WidgetListComponent);
 
 export default WidgetListContainer

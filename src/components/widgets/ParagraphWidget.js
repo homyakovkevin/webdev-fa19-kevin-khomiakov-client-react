@@ -1,7 +1,8 @@
 import React from "react";
 import WidgetButtons from "../WidgetButtons";
 
-const ParagraphWidget = ({index, widget, widgets, changeWidgetType, deleteWidget, Previewed, moveWidgetUp, moveWidgetDown}) =>
+const ParagraphWidget = ({index, widget, widgets,
+                             updateWidget, deleteWidget, Previewed, moveWidgetUp, moveWidgetDown}) =>
     <div className="mb-5 card p-1">
         {
             !Previewed &&
@@ -14,16 +15,18 @@ const ParagraphWidget = ({index, widget, widgets, changeWidgetType, deleteWidget
                         widgets={widgets}
                         moveWidgetUp={moveWidgetUp}
                         moveWidgetDown={moveWidgetDown}
-                        changeWidgetType={changeWidgetType}
                         deleteWidget={deleteWidget}
+                        updateWidget={updateWidget}
                     />
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
                         <textarea className="form-control"
-                                  placeholder="Lorem ipsum"/>
+                                  placeholder="Lorem ipsum" onChange={(event) => updateWidget(widget.id, {...widget, text: event.target.value})}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
-                    <input className="form-control" placeholder="Widget name"/>
+                    <input className="form-control" placeholder="Widget name"
+                           onChange={(event) => updateWidget(widget.id, {...widget, name: event.target.value})}
+                           defaultValue={widget.name}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
                     <h4>Preview</h4>
@@ -31,7 +34,7 @@ const ParagraphWidget = ({index, widget, widgets, changeWidgetType, deleteWidget
             </div>
         }
         <div className="row ml-sm-2 col-sm-12">
-            <label>Lorem ipsum</label>
+            <label>{widget.text}</label>
         </div>
     </div>;
 

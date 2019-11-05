@@ -2,8 +2,8 @@ import WidgetButtons from "../WidgetButtons";
 import React from "react";
 
 const LinkWidget = ({
-                        index, widget, widgets, deleteWidget, moveWidgetUp, changeWidgetType, moveWidgetDown,
-                        Previewed, changeWidgetLink, changeWidgetTitle, changeWidgetName
+                        index, widget, widgets, deleteWidget, moveWidgetUp, moveWidgetDown,
+                        Previewed, updateWidget
                     }) =>
 
     <div className="mb-5 card p-1">
@@ -18,27 +18,27 @@ const LinkWidget = ({
                         widgets={widgets}
                         moveWidgetUp={moveWidgetUp}
                         moveWidgetDown={moveWidgetDown}
-                        changeWidgetType={changeWidgetType}
                         deleteWidget={deleteWidget}
+                        updateWidget={updateWidget}
                     />
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
                     <label>Link URL</label>
                     <input className="form-control" placeholder="Link URL"
                            defaultValue={widget.href}
-                           onChange={(event) => changeWidgetLink(widget, event.target.value)}/>
+                           onChange={(event) => updateWidget(widget.id, {...widget,href:event.target.value})}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
                     <input className="form-control" placeholder="Link text"
                            defaultValue={widget.title}
-                           onChange={(event) => changeWidgetTitle(widget, event.target.value)}/>
+                           onChange={(event) => updateWidget(widget.id, {...widget,title:event.target.value})}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
-                    <input className="form-control" placeholder="https://www.youtube.com/user/jannunzi"/>
+                    <input className="form-control" placeholder="https://www.youtube.com/user/jannunzi" defaultValue={widget.href}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
                     <input className="form-control" placeholder="Widget name"
-                           onChange={(event) => changeWidgetName(widget, event.target.value)}
+                           onChange={(event) => updateWidget(widget.id, {...widget,name:event.target.value})}
                            defaultValue={widget.name}/>
                 </div>
                 <div className="row ml-sm-2 col-sm-12">
