@@ -1,7 +1,7 @@
 // let url =  "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/widgets";
 
-let url = "http://localhost:8080/api/widgets";
-let topicUrl = "http://localhost:8080/api/topics/";
+let url = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/widgets";
+let topicUrl = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/topics/";
 
 export default class WidgetService {
     constructor() {

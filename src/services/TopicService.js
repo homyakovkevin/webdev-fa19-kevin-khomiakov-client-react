@@ -1,5 +1,5 @@
-let url = "http://localhost:8080/api/topics";
-let lessonUrl = "http://localhost:8080/api/lessons/";
+let url = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/topics";
+let lessonUrl = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/lessons/";
 
 export default class TopicService {
     constructor() {

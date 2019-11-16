@@ -1,5 +1,5 @@
-let url = "http://localhost:8080/api/modules";
-let courseUrl="http://localhost:8080/api/courses/";
+let url = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/modules";
+let courseUrl="https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/courses/";
 
 export default class ModuleService {
     constructor() {
