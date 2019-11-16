@@ -3,7 +3,7 @@ import React from "react";
 
 const ListWidget = ({
                         index, widget, widgets, deleteWidget, moveWidgetUp, moveWidgetDown,
-                        Previewed, updateWidget
+                        Previewed, updateWidget, topicId
                     }) =>
 
     <div className="mb-5 card p-1">
@@ -18,6 +18,7 @@ const ListWidget = ({
                         widgets={widgets}
                         moveWidgetUp={moveWidgetUp}
                         moveWidgetDown={moveWidgetDown}
+                        topicId={topicId}
                         deleteWidget={deleteWidget}
                     />
                 </div>

@@ -6,18 +6,18 @@ import {HEADING, IMAGE, LINK, LIST, PARAGRAPH} from "../services/widgetsAsConst"
 
 const WidgetButtons = ({
                            index, widgets, moveWidgetDown, moveWidgetUp, widget, deleteWidget,
-                           updateWidget
+                           updateWidget, topicId
                        }) =>
     <div className="d-flex justify-content-around">
         {
             (index !== 0) &&
-            <button className={"btn btn-xs btn-warning mr-1"} onClick={() => moveWidgetUp(widgets, widget.id)}>
+            <button className={"btn btn-xs btn-warning mr-1"} onClick={() => moveWidgetUp(widgets, widget.id, topicId)}>
                 <FaArrowUp/>
             </button>
         }
         {
             (index !== widgets.length - 1) &&
-            <button className="btn btn-xs btn-warning mr-1" onClick={() => moveWidgetDown(widgets, widget.id)}>
+            <button className="btn btn-xs btn-warning mr-1" onClick={() => moveWidgetDown(widgets, widget.id, topicId)}>
                 <FaArrowDown/>
             </button>}
         <select className="form-control"

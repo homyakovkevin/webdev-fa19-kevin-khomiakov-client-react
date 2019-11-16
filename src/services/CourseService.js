@@ -1,6 +1,5 @@
-// import coursesJson from "./courses.json";
-
-let url = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/courses";
+// let url = "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/courses";
+let url = "http://localhost:8080/api/courses";
 
 export default class CourseService {
 

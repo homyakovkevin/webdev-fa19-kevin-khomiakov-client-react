@@ -1,6 +1,7 @@
-import React from 'react';
+// let url =  "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/widgets";
 
-let url =  "https://wbdv-f19-kevin-kho-s-c-react.herokuapp.com/api/widgets";
+let url = "http://localhost:8080/api/widgets";
+let topicUrl = "http://localhost:8080/api/topics/";
 
 export default class WidgetService {
     constructor() {
@@ -16,6 +17,9 @@ export default class WidgetService {
     findWidgets = () =>
         fetch(url).then(response => response.json());
 
+    findWidgetsForTopic = (topicId) =>
+        fetch(topicUrl + topicId + "/widgets").then(response => response.json());
+
 
     findWidget(widgetId) {
         return fetch(url + '/' + widgetId, {
@@ -28,7 +32,7 @@ export default class WidgetService {
     };
 
     createWidget = (topicId, widget) =>
-        fetch(url, {
+        fetch(topicUrl + topicId + "/widgets", {
             method: "POST",
             body: JSON.stringify(widget),
             headers: {
@@ -51,8 +55,8 @@ export default class WidgetService {
             .then(response => response.json());
     }
 
-    updateOrder(widgets) {
-        return fetch(url,
+    updateOrder(widgets, topicId) {
+        return fetch(topicUrl + topicId + "/widgets",
             {
                 method: "PUT",
                 body: JSON.stringify(widgets),

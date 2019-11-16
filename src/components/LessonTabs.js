@@ -10,6 +10,7 @@ export default class LessonTabs extends React.Component {
             lessons: this.props.lessons
         }
     }
+
     componentDidUpdate(prevProps) {
         if (prevProps.lessons !== this.props.lessons) {
             this.setState({
@@ -38,9 +39,11 @@ export default class LessonTabs extends React.Component {
                         placeholder="New Lesson"
                         className="form-control"
                         id="add-lesson-input"/>
-                    <button onClick={() => this.props.createLesson()} className="btn wbdv-new float-right">
-                        <FaPlus/>
+                    <button onClick={() => this.props.createLesson(this.props.module.id, {
+                        title: this.props.lesson.title ? this.props.lesson.title : "New Lesson"
+                    })} className="btn wbdv-new float-right"><FaPlus/>
                     </button>
+
                 </li>
             </ul>
         )

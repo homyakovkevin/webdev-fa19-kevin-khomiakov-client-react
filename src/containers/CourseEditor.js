@@ -12,6 +12,9 @@ import {FaTimes} from "react-icons/fa";
 import {FaPlus} from "react-icons/fa";
 import '../styles/CourseEditor.css'
 import CourseService from "../services/CourseService";
+import LessonService from "../services/LessonService";
+import ModuleService from "../services/ModuleService";
+import TopicService from "../services/TopicService";
 
 export default class CourseEditor
     extends React.Component {
@@ -40,88 +43,74 @@ export default class CourseEditor
             module: "",
             lesson: "",
             topic: "",
+            store: null,
 
         }
 
         this.widgetService = new WidgetService();
-
-        this.store = createStore(widgetReducer);
+        this.lessonService = new LessonService();
+        this.moduleService = new ModuleService();
+        this.topicService = new TopicService();
     }
 
-    createTopic = () => {
-        let topics = this.state.lessonSelected.topics;
-        if (!topics) {
-            topics = []
-        }
-        topics.push({
-            title: this.state.topic.title ? this.state.topic.title : "New Topic",
-            id: Date.now(),
-            widgets: []
-        });
+    componentWillMount() {
+        this.moduleService.findModulesforCourse(this.props.course.id)
+            .then(modules => this.setState({
+                modules: modules,
+            }));
+    }
+
+    createTopic = (lessonId, topic) => {
+        this.topicService.createTopic(lessonId, topic)
+            .then(topics => this.setState({
+                topics: topics
+            }));
         document.getElementById("add-topic-input").value = "";
-        let lesson = this.state.lessonSelected;
-        lesson.topics = topics;
-
-        let lessons = this.state.selectedModule.lessons;
-        lessons = lessons.map(x => x.id === lesson.id ? lesson : x);
-
-        let module = this.state.selectedModule;
-        module.lessons = lessons;
-        this.setState({
-            modules: this.state.modules.map(m => m.id === module.id ? module : m)
-        });
     };
 
-    createLesson = () => {
-        let lesson = {
-            title: this.state.lesson.title ? this.state.lesson.title : "New Lesson",
-            id: Date.now(),
-            topics: []
-        };
-
-        let lessons = this.state.selectedModule.lessons ? [...this.state.selectedModule.lessons] : [];
-        lessons.push(lesson);
+    createLesson = (moduleId, lesson) => {
+        this.lessonService.createLesson(moduleId, lesson)
+            .then(lessons =>
+                this.setState({
+                    lessons: lessons
+                }));
         document.getElementById("add-lesson-input").value = "";
-        let module = this.state.selectedModule;
-        module.lessons = lessons;
-        this.setState({
-            modules: this.state.modules.map(m => m.id === module.id ? module : m),
-        });
     };
 
-    createModule = () => {
-        let modules = this.state.modules ? this.state.modules : [];
-        modules.push({
-            id: Date.now(),
-            title: this.state.module.title ? this.state.module.title : "New Module",
-            lessons: []
-        });
+    createModule = (cId, module) => {
+        this.moduleService.createModule(cId, module)
+            .then(modules => this.setState({
+                modules: modules
+            }));
         document.getElementById("add-module-input").value = "";
-        this.setState({
-            modules: modules,
-        });
     };
 
 
     selectModule = module => {
-        this.setState(
-            {
-                selectedModule: module,
-            })
-    }
+        this.lessonService.findAllLessonsforModule(module.id)
+            .then(l => this.setState({
+                lessons: l,
+                selectedModule: module
+            }));
+    };
 
 
     selectLesson = lesson => {
-        this.setState({
-            lessonSelected: lesson,
-        })
-    }
+        this.topicService.findAllTopicsforLesson(lesson.id).then(
+            topics =>
+                this.setState({
+                    topics: topics,
+                    selectedLesson: lesson,
+                }))
+    };
 
     selectTopic = topic => {
-        this.setState({
+        this.widgetService.findWidgetsForTopic(topic.id).then(response => this.setState({
             selectedTopic: topic,
-        })
-    }
+            store: createStore(widgetReducer, {widgets: response, topicId: topic.id}),
+        }))
+
+    };
 
     componentDidMount() {
         this.widgetService.findWidgets()
@@ -137,34 +126,25 @@ export default class CourseEditor
         m.title = title;
         this.setState({
             modules: this.state.modules.map(i => i.id === m.id ? m : i)
-        })
-    }
+        });
+        this.moduleService.updateModule(m.id, m)
+    };
 
     updateLesson = (lesson, title) => {
-        let newLesson = this.state.lessonSelected;
-        newLesson.title = title;
-        let module = this.state.selectedModule;
-        let lessons = this.state.selectedModule.lessons;
-        lessons = lessons.map(l => l.id === lesson.id ? newLesson : l);
-        module.lessons = lessons;
+        let l=lesson;
+        l.title=title;
         this.setState({
-            modules: this.state.modules.map(m => m.id === module.id ? module : m)
+            lessons:this.state.lessons.map(i=>i.id===l.id?l:i)
         });
+        this.lessonService.updateLesson(l.id,l)
+
     };
 
     updateTopic = (topic, title) => {
-        let newTopic = this.state.selectedTopic;
-        newTopic.title = title;
-        let topics = this.state.lessonSelected.topics;
-        topics = topics.map(t => t.id === topic.id ? newTopic : t);
-        let lesson = this.state.lessonSelected;
-        lesson.topics = topics;
-        let lessons = this.state.selectedModule.lessons;
-        lessons = lessons.map(l => l.id === lesson.id ? lesson : l);
-        let module = this.state.selectedModule;
-        module.lessons = lessons;
+        let t=topic;
+        t.title=title;
         this.setState({
-            modules: this.state.modules.map(m => m.id === module.id ? module : m)
+            topics: this.state.topics.map(m => m.id === t.id ? t : m)
         });
     };
 
@@ -194,43 +174,28 @@ export default class CourseEditor
     };
 
     deleteModule = id => {
-        let i = this.state.modules.findIndex(m => m.id !== id);
-        this.setState(
-            {
-                selectedModule: i === -1 ? "" : this.state.modules[i],
-                lessonSelected: i !== -1 && this.state.modules[i].lessons ? this.state.modules[i].lessons[0] : "",
-                modules: this.state.modules.filter(m => m.id !== id)
-            }
-        );
+        this.moduleService.deleteModule(id)
+            .then(() => this.moduleService.findModulesforCourse(this.props.course.id))
+            .then(response => this.setState({
+                modules: response
+            }));
     };
 
     deleteLesson = lesson => {
-        if (this.state.selectedModule.lessons !== undefined) {
-            let lessons = this.state.selectedModule.lessons;
-            lessons = lessons.filter(l => l !== lesson);
-            let module = this.state.selectedModule;
-            module.lessons = lessons;
-            this.setState({
-                modules: this.state.modules.map(m => m.id === module.id ? module : m),
-                lessonSelected: lessons.length === 0 ? "" : lessons[0]
-            });
-        }
-    };
+        this.lessonService.deleteLesson(lesson.id)
+            .then(() => this.lessonService.findAllLessonsforModule(this.state.selectedModule.id))
+            .then(response => this.setState({
+                lessons: response
+            }))
+    }
 
     deleteTopic = (topic) => {
-        if (this.state.lessonSelected.topics !== undefined) {
-            let topics = this.state.lessonSelected.topics;
-            topics = topics.filter(t => t !== topic);
-            let lesson = this.state.lessonSelected;
-            lesson.topics = topics;
-            let lessons = this.state.selectedModule.lessons;
-            lessons = lessons.map(l => l.id === lesson.id ? lesson : l);
-            let module = this.state.selectedModule;
-            module.lessons = lessons;
-            this.setState({
-                modules: this.state.modules.map(m => m.id === module.id ? module : m)
-            });
-        }
+        this.topicService.deleteTopic(topic.id)
+            .then(() => this.topicService.findAllTopicsforLesson(this.state.selectedLesson.id))
+            .then(response => this.setState({
+                topics: response
+            }))
+
     };
 
 
@@ -264,7 +229,7 @@ export default class CourseEditor
                         <ModuleList selectedModule={this.state.selectedModule}
                                     selectModule={this.selectModule}
                                     updateModule={this.updateModule}
-                                    modules={this.state.course.modules}
+                                    modules={this.state.modules}
                                     createModule={this.createModule}
                                     moduleTitleChanged={this.moduleTitleChanged}
                                     deleteModule={this.deleteModule}
@@ -273,22 +238,24 @@ export default class CourseEditor
                     <div className="col-8 bg-dark">
                         <LessonTabs selectLesson={this.selectLesson}
                                     lessonSelected={this.state.lessonSelected}
-                                    lessons={this.state.selectedModule.lessons}
+                                    lessons={this.state.lessons}
                                     updateLesson={this.updateLesson}
                                     createLesson={this.createLesson}
                                     lessonTitleChanged={this.LessonTitleChanged}
                                     deleteLesson={this.deleteLesson}
                         />
-                        <TopicPills topics={this.state.lessonSelected.topics}
+                        <TopicPills topics={this.state.topics}
                                     selectedTopic={this.state.selectedTopic}
+                                    lesson={this.state.selectedLesson}
+                                    topic={this.state.topic}
                                     updateTopic={this.updateTopic}
                                     selectTopic={this.selectTopic}
                                     createTopic={this.createTopic}
                                     topicTitleChanged={this.topicTitleChanged}
                                     deleteTopic={this.deleteTopic}/>
                         <br/>
-                        {this.state.selectedTopic && this.store &&
-                        <Provider store={this.store}>
+                        {this.state.selectedTopic && this.state.store &&
+                        <Provider store={this.state.store}>
                             <WidgetListContainer/>
                         </Provider>}
                     </div>

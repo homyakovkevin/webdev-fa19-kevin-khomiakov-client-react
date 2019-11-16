@@ -11,7 +11,7 @@ class WidgetListComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.props.findWidgets();
+        this.props.findWidgets(this.props.topicId);
     }
 
     state = {
@@ -46,10 +46,10 @@ class WidgetListComponent extends React.Component {
 
                 <button className="btn btn-danger floating" onClick={() => this.props.createWidget(this.props.topicId, {
                     type: "HEADING",
-                    id: 0,
                     name: "New Widget",
                     text: "",
-                    size: "h1"
+                    size: "h1",
+                    ord:this.props.widgets.length+1,
                 })}>
                     <i className="fa fa-plus" style={{color: "white"}}/>
                 </button>

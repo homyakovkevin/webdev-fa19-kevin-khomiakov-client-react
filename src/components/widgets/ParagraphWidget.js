@@ -2,7 +2,7 @@ import React from "react";
 import WidgetButtons from "../WidgetButtons";
 
 const ParagraphWidget = ({index, widget, widgets,
-                             updateWidget, deleteWidget, Previewed, moveWidgetUp, moveWidgetDown}) =>
+                             updateWidget, deleteWidget, Previewed, moveWidgetUp, moveWidgetDown, topicId}) =>
     <div className="mb-5 card p-1">
         {
             !Previewed &&
@@ -15,6 +15,7 @@ const ParagraphWidget = ({index, widget, widgets,
                         widgets={widgets}
                         moveWidgetUp={moveWidgetUp}
                         moveWidgetDown={moveWidgetDown}
+                        topicId={topicId}
                         deleteWidget={deleteWidget}
                         updateWidget={updateWidget}
                     />

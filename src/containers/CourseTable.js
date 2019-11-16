@@ -39,9 +39,7 @@ export default class CourseTable extends React.Component {
                     </div>
                     <div className="col-2 col-sm-1 col-md-1">
                         <button className="wbdv-button wbdv-add-course" onClick={() => this.props.createCourse({
-                            id: 0,
-                            title: this.state.title,
-                            widgets: []
+                            title:  this.state.title?this.state.title:"New Course"
                         })}>
                             <FaPlusCircle size={25}/>
                         </button>
@@ -86,9 +84,7 @@ export default class CourseTable extends React.Component {
                     </table>
                 </div>
                 <button className="btn-plus-right" onClick={() => this.props.createCourse({
-                    id: 0,
                     title: "New Course",
-                    widgets: []
                 })}>
                     <FaPlusCircle size={35}/>
                 </button>
